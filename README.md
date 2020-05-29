@@ -41,7 +41,7 @@ The script needs to know which column contains votes for Clinton and which colum
 
 Without those arguments, the script will guess based on the expected number of votes for each candidate.
 
-# Verification Report Fields
+# Verification Report Breakdown
 
 ## Quality Scores:
 
