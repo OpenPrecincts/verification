@@ -49,7 +49,7 @@ Without those arguments, the script will guess based on the expected number of v
 
 ### Vote Score
 
-Compute the ratio of votes observed in the **Input** to the votes expected (based on official state election data records from MEDSL) for the democratic and republican candidate. Then the Vote Score is the weighted average of these ratios. [Python Implementation](74)
+Compute the ratio of votes observed in the **Input** to the votes expected (based on official state election data records from MEDSL) for the democratic and republican candidate. Then the Vote Score is the weighted average of these ratios. [Python Implementation](https://github.com/OpenPrecincts/verification/blob/c038afe26d17ca255128fee43d06e7a377f7f053/verify.py#L74)
 
 * Ideally Vote Score = 1
 * A Vote Score above 1 indicates that the **Input** contains more recorded votes than the official state election data
@@ -57,7 +57,7 @@ Compute the ratio of votes observed in the **Input** to the votes expected (base
 
 ### County Vote Score Dispersion
 
-For each county, compute the square of the difference between the expected number of votes for the democratic and republican candidate. Then, County Vote Score Dispersion is the average of the square difference across all the counties in the state. [Python Implementation](439)
+For each county, compute the square of the difference between the expected number of votes for the democratic and republican candidate. Then, County Vote Score Dispersion is the average of the square difference across all the counties in the state. [Python Implementation](https://github.com/OpenPrecincts/verification/blob/c038afe26d17ca255128fee43d06e7a377f7f053/verify.py#L452)
 
 * Ideally County Vote Score Dispersion = 0
 * As the County Vote Score Dispersion increases, so does the degree to which the **Input** differs with respect to official state election data records about the county-level results. 
@@ -65,7 +65,7 @@ For each county, compute the square of the difference between the expected numbe
 
 ### Area Difference Score
 
-Compute the symmetric difference between the **Input's** geometries and the expected geometries for that state from the Census Bureau. Then Area Difference Score is the ratio of the symmetric difference's area to the area of the precinct shapefiles. [Python Implementation](176)
+Compute the symmetric difference between the **Input's** geometries and the expected geometries for that state from the Census Bureau. Then Area Difference Score is the ratio of the symmetric difference's area to the area of the precinct shapefiles. [Python Implementation](https://github.com/OpenPrecincts/verification/blob/c038afe26d17ca255128fee43d06e7a377f7f053/verify.py#L185)
 
 * Ideally Area Difference Score is 0
 * As the Area Difference Score increases it indicates a greater geometric difference between the observed geometry in the **Input** and the expected geometry.
