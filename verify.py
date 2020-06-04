@@ -353,6 +353,7 @@ def assign_GEOID(state_prec_gdf, state_fips):
     n_counties_observed = state_prec_gdf["GEOID"].nunique()
     n_counties_expected = state_county_df["GEOID"].nunique()
     assert n_counties_expected == n_counties_observed
+    # fixes discprency between expected shape files and results for Hawaii
     state_prec_gdf["GEOID"] = state_prec_gdf["GEOID"].replace("15005", "15009")
     return state_prec_gdf
 
@@ -471,6 +472,21 @@ def verify_topology(state_prec_df, state_report):
     :state_prec_df: (GeoDataFrame)
     :state_report: (StateReport)
     """
+    def verify_maup(state_prec_gdf, state_report):
+        state_county_df = census_us_county_gdf[
+            census_us_county_gdf["STATEFP"] == state_report.fips
+        ]
+        # match their projections (necessary for maup.assign)
+        if not state_prec_gdf.crs:
+            state_prec_gdf.crs = "epsg:4326"
+        state_prec_gdf = state_prec_gdf.to_crs(state_county_df.crs)
+        assert state_prec_gdf.crs == state_county_df.crs
+        gdf = fix_buffer(state_prec_gdf)
+        try:
+            maup.assign(gdf, state_county_df)
+            return True
+        except:
+            return False
 
     def verify_gerrychain(df):
         try:
@@ -490,6 +506,7 @@ def verify_topology(state_prec_df, state_report):
     else:
         state_report.all_precincts_have_a_geometry = True
         state_report.can_use_gerrychain = verify_gerrychain(state_prec_df)
+        state_report.can_use_maup = verify_maup(state_prec_df, state_report)
         return state_report
 
 
@@ -625,7 +642,7 @@ def verify_state(
     state_prec_gdf, state_abbreviation, source, year, d_col=None, r_col=None, path=None
 ):
     """
-    returns a complete (StateReport) object.
+    returns a complete (StateReport) object and a ((CountyReport) list) for the state.
 
     :state_prec_gdf: (GeoDataFrame) containing precinct geometries and election results
     :state_abbreviation: (str) e.g. 'MA' for Massachusetts
@@ -657,19 +674,15 @@ def verify_state(
 
     # poplulate the report
     state_report = verify_topology(state_prec_gdf, state_report)
-    county_reports = []
 
-    try:
-        state_prec_gdf = assign_GEOID(state_prec_gdf, state_report.fips)
-        state_report.can_use_maup = True
-        state_report, county_reports = verify_counties(state_prec_gdf, state_report)
-
-    except:
-        state_report.can_use_maup = False
-        if "GEOID" in state_prec_gdf.columns:
-            print("GEOID in manual mode")
-            state_report, county_reports = verify_counties(state_prec_gdf, state_report)
-
+    if "GEOID" not in state_prec_gdf.columns:
+        try:
+            state_prec_gdf = assign_GEOID(state_prec_gdf, state_report.fips)
+        except:
+            pass
+    
+    assert "GEOID" in state_prec_gdf.columns
+    state_report, county_reports = verify_counties(state_prec_gdf, state_report)
     if path:
         make_report(path, state_report, county_reports)
     return state_report, county_reports

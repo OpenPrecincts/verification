@@ -17,6 +17,8 @@ This script compares precinct level election results from the **Input** with the
 In order to do the comparisons detailed above, the script needs to know about the makeup of the **Input** file. Specifically, it needs to know the county (or equivalent) for each precinct and which columns correspond with the votes for Hillary Clinton and Donald Trump for each precinct.
 
 ### GEOID/ County assignment for each precinct
+[Wikipedia link](https://en.wikipedia.org/wiki/FIPS_county_code)
+
 The precincts need to be assigned a county in the form of the county's 5 digit GEOID code described below:
 
 #### GEOID SPEC:

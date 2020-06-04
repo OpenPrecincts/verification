@@ -8,13 +8,13 @@ df["GEOID"] = df.state_fip.apply(lambda x: str(x).zfill(2)) + df.county_fip.appl
     lambda x: str(x).zfill(3)
 )
 geoid_to_county_name = pd.Series(df["county_name"].values, index=df["GEOID"]).to_dict()
-state_fip_to_geoid_to_county_name = {}
+state_fip_to_county_to_geoid = {}
 for state_fip in df.state_fip.unique():
     state_df = df[df.state_fip == state_fip]
     state_dict = pd.Series(
         state_df["GEOID"].values, index=state_df["county_name"]
     ).to_dict()
-    state_fip_to_geoid_to_county_name[state_fip] = state_dict
+    state_fip_to_county_to_geoid[state_fip] = state_dict
 
 # Lookup tables
 state_to_state_po = {
