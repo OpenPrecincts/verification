@@ -353,8 +353,6 @@ def assign_GEOID(state_prec_gdf, state_fips):
     n_counties_observed = state_prec_gdf["GEOID"].nunique()
     n_counties_expected = state_county_df["GEOID"].nunique()
     assert n_counties_expected == n_counties_observed
-    # fixes discprency between expected shape files and results for Hawaii
-    state_prec_gdf["GEOID"] = state_prec_gdf["GEOID"].replace("15005", "15009")
     return state_prec_gdf
 
 
