@@ -234,7 +234,7 @@ def get_column_name(target, potential_column_names, gdf):
     potential_column_names = list(potential_column_names)
     for idx, column_name in enumerate(potential_column_names):
         print("[{}] {} e.g. {}".format(idx, column_name, gdf[column_name][0]))
-    print("[{}] N/A (no county)".format(idx + 1))
+    print("[{}] N/A (no suitable match for {})".format(idx + 1, target))
     idx_selection = int(input("Select the column (by index): "))
     if 0 <= idx_selection <= idx:
         return potential_column_names[idx_selection]
@@ -310,8 +310,6 @@ def get_party_cols(gdf, state_abbreviation):
         d_col = get_column_name("Democrat candidate votes", col_to_value.keys(), gdf)
         r_col = get_column_name("Republican candidate votes", col_to_value.keys(), gdf)
     assert d_col != r_col
-    print("d_col : ", d_col)
-    print("r_col : ", r_col)
     return d_col, r_col
 
 
@@ -482,8 +480,10 @@ def verify_topology(state_prec_df, state_report):
         gdf = fix_buffer(state_prec_gdf)
         try:
             maup.assign(gdf, state_county_df)
+            print("MAUP assign was successful")
             return True
-        except:
+        except Exception as error:
+            print("Unable to use MAUP assign: \n\n", error)
             return False
 
     def verify_gerrychain(df):
@@ -653,16 +653,28 @@ def verify_state(
     d_col, r_col are optional - if they are not provided, `get_party_cols` will be used
     to guess based on comparing each column in state_prec_gdf to the expected results. 
     """
+    print('Starting verification process for: ', state_abbreviation, source, year)
+
     # assign d_col and r_col
     if not d_col or not r_col:
+        print('Candidate vote count columns are being assigned automatically')
         d_col, r_col = get_party_cols(state_prec_gdf, state_abbreviation)
+    else:
+        print('Candidate vote count columns are being assigned manually')
+    print("Choose d_col as: ", d_col)
+    print("Choose r_col as: ", r_col)
     state_prec_gdf = state_prec_gdf.rename(columns={d_col: "d_col", r_col: "r_col"})
+
+    # remove unecessary columns
     cols_to_keep = ["d_col", "r_col", "geometry"]
     if "GEOID" in state_prec_gdf.columns:
         cols_to_keep.append("GEOID")
     state_prec_gdf = state_prec_gdf[cols_to_keep]
+    print('Verification will now begin with this GeoDataFrame: \n')
+    print(state_prec_gdf.head())
 
     # initialize state report
+    print('Starting Vote Verification')
     results_df = expected_election_results_2016[
         expected_election_results_2016.state_po == state_abbreviation
     ]
@@ -671,16 +683,24 @@ def verify_state(
     )
 
     # poplulate the report
+    print('Starting Topology Verification')
     state_report = verify_topology(state_prec_gdf, state_report)
 
+    print('Starting County Verification')
+    # assign GEOID
     if "GEOID" not in state_prec_gdf.columns:
         try:
+            print('Missing GEOID Column - attempting automatic assignment')
             state_prec_gdf = assign_GEOID(state_prec_gdf, state_report.fips)
+            print('GEOID assignment successful')
         except:
             pass
-    
+    else:
+        print('Using the GEOID Column in the original shapefile.')
     assert "GEOID" in state_prec_gdf.columns
+    
     state_report, county_reports = verify_counties(state_prec_gdf, state_report)
     if path:
         make_report(path, state_report, county_reports)
+    print("All done!\n")
     return state_report, county_reports
