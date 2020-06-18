@@ -11,7 +11,7 @@
 |:-----------------------------------------------------------------------------------------------------------|----------:|
 | [vote_score](https://github.com/OpenPrecincts/verification#vote-score)                                     | 1         |
 | [county_vote_score_dispersion](https://github.com/OpenPrecincts/verification#county-vote-score-dispersion) | 0         |
-| [vote_score](https://github.com/OpenPrecincts/verification#vote-score)                                     | 1         |
+| [worst_county_vote_score](https://github.com/OpenPrecincts/verification#vote-score)                        | 1         |
 | [median_county_area_difference_score](https://github.com/OpenPrecincts/verification#area-difference-score) | 0.0300684 |
 | [worst_county_area_difference_score](https://github.com/OpenPrecincts/verification#area-difference-score)  | 0.229951  |
 

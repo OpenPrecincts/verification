@@ -549,7 +549,7 @@ def make_report(path, state_report, county_report_lst):
             {
                 "vote_score": "[vote_score](https://github.com/OpenPrecincts/verification#vote-score)",
                 "county_vote_score_dispersion": "[county_vote_score_dispersion](https://github.com/OpenPrecincts/verification#county-vote-score-dispersion)",
-                "worst_county_vote_score": "[vote_score](https://github.com/OpenPrecincts/verification#vote-score)",
+                "worst_county_vote_score": "[worst_county_vote_score](https://github.com/OpenPrecincts/verification#vote-score)",
                 "median_county_area_difference_score": "[median_county_area_difference_score](https://github.com/OpenPrecincts/verification#area-difference-score)",
                 "worst_county_area_difference_score": "[worst_county_area_difference_score](https://github.com/OpenPrecincts/verification#area-difference-score)",
             }
