@@ -2,7 +2,7 @@ import geopandas as gpd
 import pandas as pd
 import warnings
 import shapely as shp
-warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action="ignore", category=FutureWarning)
 
 # Expected Geomerty Shapefiles
 census_us_county_gdf = gpd.read_file("./data/county_shapefiles/cb_2016_us_county_500k")
@@ -18,8 +18,8 @@ census_us_county_gdf = census_us_county_gdf[
 # Maui County population 167,417 in the eleciton results
 # to match the election results, we combine them here under Maui
 poly = shp.ops.cascaded_union(census_us_county_gdf[census_us_county_gdf.GEOID.isin(["15005", "15009"])]["geometry"])
-census_us_county_gdf.loc[(census_us_county_gdf.GEOID == "15009"),'geometry'] = gpd.GeoSeries(poly)
-census_us_county_gdf = census_us_county_gdf.drop(census_us_county_gdf[census_us_county_gdf.GEOID == '15005'].index)
+census_us_county_gdf.loc[(census_us_county_gdf.GEOID == "15009"),"geometry"] = gpd.GeoSeries(poly)
+census_us_county_gdf = census_us_county_gdf.drop(census_us_county_gdf[census_us_county_gdf.GEOID == "15005"].index)
 
 
 alaska_districts = gpd.read_file("./data/county_shapefiles/2013-HD-ProclamationPlan")
@@ -81,3 +81,4 @@ county_level_results_df["GEOID"] = county_level_results_df["FIPS"].apply(
 expected_election_results_2016 = county_level_results_df[
     ["state_po", "county", "GEOID", "party", "candidatevotes"]
 ]
+expected_election_results_2016 = expected_election_results_2016.rename(columns={"candidatevotes":"votes"}).reset_index()
