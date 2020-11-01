@@ -3,7 +3,14 @@
 
 [Open Precincts Verification Script](https://github.com/OpenPrecincts/verification)
 
-[Verification Report Breakdown](https://github.com/OpenPrecincts/verification#verification-report-fields)
+[Verification Report Breakdown](https://github.com/OpenPrecincts/verification#verification-report-breakdown)
+
+## Validation Metadata
+* `Year Validated:` 2016 
+* `Race Validated:` President
+* `State Validated:` MD
+* `File Provider:` Princeton Gerrymandering Project
+
 ## Statewide Reports
 
 ### Quality Scores:
