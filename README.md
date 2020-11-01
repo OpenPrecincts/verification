@@ -49,6 +49,7 @@ GEOID is optional for `state_prec_gdf`, but strongly reccomended. [Learn more...
 | GEOID       | object | '01001'                    |
 | party       | object | 'democrat' or 'republican' |
 | votes       | int    | 5936                       |
+
 The `county_level_results_df` DataFrame should only contain results for the `office` that's passed as an input.
 
 #### GEOID/County assignment for each precinct
@@ -90,7 +91,7 @@ Without those arguments, the script will guess based on the expected number of v
 
 The `verify.verify_state_2016(...)` function will call `verify.verify_state(...)` and automatically apply 2016 specific defaults:
 
-* Uses Official County Results from the 2016 Presidential Election already in this repository
+* Uses Official County Results from the 2016 Presidential Election already in this repository
 * Sets year to '2016'
 * Sets office to 'President'
 
