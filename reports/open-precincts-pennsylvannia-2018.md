@@ -6,6 +6,7 @@
 [Verification Report Breakdown](https://github.com/OpenPrecincts/verification#verification-report-breakdown)
 
 ## Validation Metadata
+
 * `Year Validated:` 2018 
 * `Race Validated:` U.S. Senate
 * `State Validated:` PA
@@ -13,7 +14,8 @@
 
 ## Statewide Reports
 
-### Quality Scores:
+### Quality Scores
+
 |                                                                                                            |                |
 |:-----------------------------------------------------------------------------------------------------------|---------------:|
 | [vote_score](https://github.com/OpenPrecincts/verification#vote-score)                                     |    1.00007     |
