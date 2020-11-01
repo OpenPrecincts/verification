@@ -88,7 +88,7 @@ Without those arguments, the script will guess based on the expected number of v
 
 #### 2016 Precinct-Level Election Shapefiles
 
-The `verify.verify_state_2016(...)` function will call `verify.verify_state(...)` automatically apply 2016 specific defaults:
+The `verify.verify_state_2016(...)` function will call `verify.verify_state(...)` and automatically apply 2016 specific defaults:
 
 * Uses Official County Results from the 2016 Presidential Election already in this repository
 * Sets year to '2016'
