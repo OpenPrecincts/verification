@@ -1,0 +1,10 @@
+README.md
+setup.py
+op-verification/__init__.py
+op-verification/reference_data.py
+op-verification/verification_data.py
+op-verification/verify.py
+op_verification.egg-info/PKG-INFO
+op_verification.egg-info/SOURCES.txt
+op_verification.egg-info/dependency_links.txt
+op_verification.egg-info/top_level.txt
