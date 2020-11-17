@@ -1,5 +1,8 @@
 # Verification of Election Shapefiles
 
+![PyPI - License](https://img.shields.io/pypi/l/op-verification)
+![PyPI](https://img.shields.io/pypi/v/op-verification)
+
 This verification script generates a report that compares a **Precinct-Level Election Shapefile** with expected election results and geometries.
 
 ## Sources
