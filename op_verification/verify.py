@@ -24,8 +24,6 @@ from reference_data import (
     state_abbreviation_to_state_name,
 )
 
-pd.options.mode.chained_assignment = None
-warnings.filterwarnings("ignore")
 
 class Election:
     def __init__(self, results_df):
@@ -87,7 +85,7 @@ class ElectionReport(Election):
 
         Compute the ratio of votes observed in the **Input** to the votes expected
         (based on official state election data records from MEDSL) for the democratic
-        and republican candidate. Then the Vote Score is the weighted average of 
+        and republican candidate. Then the Vote Score is the weighted average of
         these ratios. Check out the README for more information.
         """
         n_two_party_votes_expected = (
@@ -173,7 +171,7 @@ def fix_buffer(gdf):
     return (GeoDataFrame) with the 'bufer(0) trick' applied
 
     :gdf: (GeoDataFrame) object
-    
+
     Can be useful when trying to mitigate 'self-intersection' issues
     """
     buffered = gdf.buffer(0)
@@ -191,11 +189,11 @@ def get_area_difference_score(gdf1, gdf2, path=None):
     :gdf2: (GeoDataFrame)
     :path: (str) representing the file path where a shapefile of the diff should be saved
 
-    Compute the symmetric difference between gdf1 and gdf2 geometries'. 
+    Compute the symmetric difference between gdf1 and gdf2 geometries'.
     The Area Difference Score is the ratio of the symmetric difference's area to the
     area of the precinct shapefiles. Check out the README for more information.
 
-    Optionally, to save a shapefile of the symmetric difference provide an arguement 
+    Optionally, to save a shapefile of the symmetric difference provide an arguement
     for the path parameter.
     """
     try:
@@ -246,13 +244,13 @@ def get_column_name(target, potential_column_names, gdf):
 def get_closest_column(target_value, target_name, col_to_value, gdf, stopping_words=[]):
     """
     return the name of the column closet to the 'target_value' (str)
-    
+
     :target_value: (int) the ideal value for the column to have from applying an aggfunc
-    :target_name: (str) the name of the target column 
+    :target_name: (str) the name of the target column
     :col_to_value: ({(str):(int)}) dictionary mapping column name to column value
     :gdf: (GeoDataFrame) containing the columns being reviewed
     :stopping_words: ((str) list)
-    
+
     If a stopping word is in a column name then that column name will be returned.
     Ignores case. Stopping words should be in descending order of relavence.
 
@@ -316,7 +314,7 @@ def get_party_cols(gdf, state_abbreviation):
 
 def assign_GEOID(state_prec_gdf, state_fips):
     """
-    return the (GeoDataFrame) with a column 'GEOID' indicating a precinct's county 
+    return the (GeoDataFrame) with a column 'GEOID' indicating a precinct's county
 
     :state_prec_gdf: (GeoDataFrame) with statewide precinct level election results
     :state_fips: (int) Federal Information Processing Standard state code
@@ -324,7 +322,7 @@ def assign_GEOID(state_prec_gdf, state_fips):
     returned GeoDataFrame's 'GEOID' column will conform to the GEOID spec:
 
     Elements of the GEOID column are 5 character strings. The first 2 characters
-    are the StateFP code and the last 3 characters are the CountyFP code. e.g. 
+    are the StateFP code and the last 3 characters are the CountyFP code. e.g.
 
     Massachusetts' StateFP = '25'
     Essex County's CountyFP = '009'
@@ -365,7 +363,7 @@ def verify_counties(gdf, county_level_results_df, state_report):
 
     Expects the first two arguements to have a column 'GEOID'. Elements
     of the GEOID column are 5 character strings. The first 2 characters are the StateFP
-    code and the last 3 characters are the CountyFP code. e.g. 
+    code and the last 3 characters are the CountyFP code. e.g.
 
     Massachusetts' StateFP = '25'
     Essex County's CountyFP = '009'
@@ -388,13 +386,15 @@ def verify_counties(gdf, county_level_results_df, state_report):
             return -1
         else:
             return max(diff_set)
-    
+
     # verify preconditions:
-    assert {"GEOID",'geometry'}.issubset(set(gdf.columns))
-    assert {'county', 'GEOID', 'party', 'votes'}.issubset(set(county_level_results_df.columns))
+    assert {"GEOID", "geometry"}.issubset(set(gdf.columns))
+    assert {"county", "GEOID", "party", "votes"}.issubset(
+        set(county_level_results_df.columns)
+    )
     for sample_geoid in {gdf["GEOID"][0], county_level_results_df["GEOID"][0]}:
         assert type(sample_geoid) == str and len(sample_geoid) == 5
-    
+
     results_county_GEOID_set = set(county_level_results_df["GEOID"].unique())
     n_counties = len(results_county_GEOID_set)
     assert n_counties == gdf["GEOID"].nunique()
@@ -408,7 +408,7 @@ def verify_counties(gdf, county_level_results_df, state_report):
     n_matches = 0
     county_reports = []
 
-    for shp_county_GEOID in gdf['GEOID'].unique():
+    for shp_county_GEOID in gdf["GEOID"].unique():
         if shp_county_GEOID in results_county_GEOID_set:
             n_matches += 1
 
@@ -433,9 +433,11 @@ def verify_counties(gdf, county_level_results_df, state_report):
             county_reports.append(county_report)
 
         else:
-            print("GEOID={} (Name = {}) is NOT in `county_level_results_df`".format(
-                shp_county_GEOID,
-                geoid_to_county_name.get(shp_county_GEOID, "UNKNOWN"))
+            print(
+                "GEOID={} (Name = {}) is NOT in `county_level_results_df`".format(
+                    shp_county_GEOID,
+                    geoid_to_county_name.get(shp_county_GEOID, "UNKNOWN"),
+                )
             )
 
     # test for full coverage
@@ -465,10 +467,11 @@ def verify_counties(gdf, county_level_results_df, state_report):
 def verify_topology(state_prec_df, state_report):
     """
     returns (StateReport) instance with the topology fields populated e.g. can_use_gerrychain
-    
+
     :state_prec_df: (GeoDataFrame)
     :state_report: (StateReport)
     """
+
     def verify_maup(state_prec_gdf, state_report):
         state_county_df = census_us_county_gdf[
             census_us_county_gdf["STATEFP"] == state_report.fips
@@ -523,7 +526,7 @@ def make_report(path, state_report, county_report_lst):
     """
     write markdown report to file at `reports/<path>.md'
 
-    :path: (str) filepath to write the output 
+    :path: (str) filepath to write the output
     :state_report: (StateReport)
     :county_report: ((CountyReport) list)
     """
@@ -644,22 +647,22 @@ def make_report(path, state_report, county_report_lst):
         county_reports_md,
     )
 
-    if '.' in path:
-        path = path.split('.')[0]
+    if "." in path:
+        path = path.split(".")[0]
     with open("reports/{}.md".format(path), "w") as text_file:
         text_file.write(report)
 
 
 def verify_state(
-    state_prec_gdf, 
-    state_abbreviation, 
-    source, 
-    year, 
+    state_prec_gdf,
+    state_abbreviation,
+    source,
+    year,
     county_level_results_df,
     office,
-    d_col=None, 
-    r_col=None, 
-    path=None
+    d_col=None,
+    r_col=None,
+    path=None,
 ):
     """
     returns a complete (StateReport) object and a ((CountyReport) list) for the state.
@@ -675,23 +678,25 @@ def verify_state(
     :path: (str) filepath to which the report should be saved (if None it won't be saved)
 
     d_col, r_col are optional - if they are not provided, `get_party_cols` will be used
-    to guess based on comparing each column in state_prec_gdf to the expected results. 
+    to guess based on comparing each column in state_prec_gdf to the expected results.
     """
-    print('Starting verification process for: ', state_abbreviation, source, year)
+    print("Starting verification process for: ", state_abbreviation, source, year)
 
     state_prec_gdf = state_prec_gdf.reset_index()
     county_level_results_df = county_level_results_df.reset_index()
-    
+
     # enforce expected schema
-    assert 'geometry' in state_prec_gdf.columns
-    assert {'county', 'GEOID', 'party', 'votes'}.issubset(set(county_level_results_df.columns))
+    assert "geometry" in state_prec_gdf.columns
+    assert {"county", "GEOID", "party", "votes"}.issubset(
+        set(county_level_results_df.columns)
+    )
 
     # assign d_col and r_col
     if not d_col or not r_col:
-        print('Candidate vote count columns are being assigned automatically')
+        print("Candidate vote count columns are being assigned automatically")
         d_col, r_col = get_party_cols(state_prec_gdf, state_abbreviation)
     else:
-        print('Candidate vote count columns are being assigned manually')
+        print("Candidate vote count columns are being assigned manually")
     print("Choose d_col as: ", d_col)
     print("Choose r_col as: ", r_col)
     state_prec_gdf = state_prec_gdf.rename(columns={d_col: "d_col", r_col: "r_col"})
@@ -701,45 +706,48 @@ def verify_state(
     if "GEOID" in state_prec_gdf.columns:
         cols_to_keep.append("GEOID")
     state_prec_gdf = state_prec_gdf[cols_to_keep]
-    print('Verification will now begin with this GeoDataFrame: \n')
+    print("Verification will now begin with this GeoDataFrame: \n")
     print(state_prec_gdf.head())
 
     # initialize state report
-    print('Starting Vote Verification')
+    print("Starting Vote Verification")
     state_report = StateReport(
-        county_level_results_df, state_prec_gdf, state_abbreviation, year, source, office
+        county_level_results_df,
+        state_prec_gdf,
+        state_abbreviation,
+        year,
+        source,
+        office,
     )
 
     # poplulate the report
-    print('Starting Topology Verification')
+    print("Starting Topology Verification")
     state_report = verify_topology(state_prec_gdf, state_report)
 
-    print('Starting County Verification')
+    print("Starting County Verification")
     # assign GEOID
     if "GEOID" not in state_prec_gdf.columns:
         try:
-            print('Missing GEOID Column - attempting automatic assignment')
+            print("Missing GEOID Column - attempting automatic assignment")
             state_prec_gdf = assign_GEOID(state_prec_gdf, state_report.fips)
-            print('GEOID assignment successful')
+            print("GEOID assignment successful")
         except:
             pass
     else:
-        print('Using the GEOID Column in the original shapefile.')
+        print("Using the GEOID Column in the original shapefile.")
     assert "GEOID" in state_prec_gdf.columns
-    
-    state_report, county_reports = verify_counties(state_prec_gdf, county_level_results_df, state_report)
+
+    state_report, county_reports = verify_counties(
+        state_prec_gdf, county_level_results_df, state_report
+    )
     if path:
         make_report(path, state_report, county_reports)
     print("All done!\n")
     return state_report, county_reports
 
+
 def verify_state_2016(
-    state_prec_gdf, 
-    state_abbreviation, 
-    source,
-    d_col=None, 
-    r_col=None, 
-    path=None
+    state_prec_gdf, state_abbreviation, source, d_col=None, r_col=None, path=None
 ):
     """
     returns a complete (StateReport) object and a ((CountyReport) list) for the state.
@@ -752,7 +760,7 @@ def verify_state_2016(
     :path: (str) filepath to which the report should be saved (if None it won't be saved)
 
     d_col, r_col are optional - if they are not provided, `get_party_cols` will be used
-    to guess based on comparing each column in state_prec_gdf to the expected results. 
+    to guess based on comparing each column in state_prec_gdf to the expected results.
 
     Applies 2016 defaults:
     * Uses Official County Results from the 2016 Presidential Election
@@ -761,16 +769,16 @@ def verify_state_2016(
     """
 
     results_df = expected_election_results_2016[
-        expected_election_results_2016['state_po'] == state_abbreviation
+        expected_election_results_2016["state_po"] == state_abbreviation
     ]
     return verify_state(
-        state_prec_gdf, 
-        state_abbreviation, 
-        source, 
+        state_prec_gdf,
+        state_abbreviation,
+        source,
         2016,
         results_df,
         "President",
-        d_col=d_col, 
-        r_col=r_col, 
+        d_col=d_col,
+        r_col=r_col,
         path=path,
-)
+    )
