@@ -1,8 +1,6 @@
 import geopandas as gpd
 import pandas as pd
-import warnings
 import shapely as shp
-warnings.simplefilter(action="ignore", category=FutureWarning)
 
 # Expected Geomerty Shapefiles
 census_us_county_gdf = gpd.read_file("./data/county_shapefiles/cb_2016_us_county_500k")
