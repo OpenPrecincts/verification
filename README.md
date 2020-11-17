@@ -101,7 +101,7 @@ Using this funciton for a 2016 Precinct-Level Election Shapefile has the benefit
 
 For non-2016 Precinct-Level Election Shapefiles, you do need to supply a schema-conforming `county_level_results_df` to `verify.verify_state(...)`. I reccomend looking on the Department of State website for the state being validated. For example, I found official county results for Pennsylannia's 2018 election [here](https://electionreturns.pa.gov/)
 
-Checkout `Verification Example Notebook.ipynb` for examples of both cases.
+Checkout [`Verification Example Notebook.ipynb`](https://github.com/OpenPrecincts/verification/blob/master/Verification%20Example%20Notebook.ipynb) for examples of both cases.
 
 ## Verification Report Breakdown
 
