@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: op-verification
-Version: 0.0.1
+Version: 0.0.4
 Summary: Compares a Precinct-Level Election Shapefile with expected election results and geometries.
 Home-page: https://github.com/OpenPrecincts/verification
 Author: Baxter Demers
@@ -41,6 +41,7 @@ Description: # Verification of Election Shapefiles
         Pay close attention to the name and [`dtype`](https://numpy.org/doc/stable/reference/generated/numpy.dtype.html) of your columns to ensure the script works correctly. It's permissible to include more columns than those listed here (they will just be ignored by the script).
         
         `state_prec_gdf`:
+        
         | Column Name | dtype    | example                                           |
         |-------------|----------|---------------------------------------------------|
         | `d_col`     | int      | 5936                                              |
@@ -51,6 +52,7 @@ Description: # Verification of Election Shapefiles
         GEOID is optional for `state_prec_gdf`, but strongly reccomended. [Learn more...](https://github.com/OpenPrecincts/verification#geoid-county-assignment-for-each-precinct)
         
         `county_level_results_df`:
+        
         | Column Name | dtype  | example                    |
         |-------------|--------|----------------------------|
         | county      | object | 'Essex County'             |
@@ -109,7 +111,7 @@ Description: # Verification of Election Shapefiles
         
         For non-2016 Precinct-Level Election Shapefiles, you do need to supply a schema-conforming `county_level_results_df` to `verify.verify_state(...)`. I reccomend looking on the Department of State website for the state being validated. For example, I found official county results for Pennsylannia's 2018 election [here](https://electionreturns.pa.gov/)
         
-        Checkout [`Verification Example Notebook.ipynb`](https://github.com/OpenPrecincts/verification/blob/master/Verification%20Example%20Notebook.ipynb) for examples of both cases.
+        Checkout [`Verification Example Notebook.ipynb`](https://github.com/OpenPrecincts/verification/blob/master/examples/Verification%20Example%20Notebook.ipynb) for examples of both cases.
         
         ## Verification Report Breakdown
         
@@ -117,7 +119,7 @@ Description: # Verification of Election Shapefiles
         
         #### Vote Score
         
-        Compute the ratio of votes observed in `state_prec_gdf` to the votes expected (based on official state election data records in `county_level_results_df`) for the democratic and republican candidate. Then the Vote Score is the weighted average of these ratios. [Python Implementation](https://github.com/OpenPrecincts/verification/blob/c038afe26d17ca255128fee43d06e7a377f7f053/verify.py#L74)
+        Compute the ratio of votes observed in `state_prec_gdf` to the votes expected (based on official state election data records in `county_level_results_df`) for the democratic and republican candidate. Then the Vote Score is the weighted average of these ratios. [Python Implementation](https://github.com/OpenPrecincts/verification/blob/master/op_verification/verify.py#L73)
         
         * Ideally Vote Score = 1
         * A Vote Score above 1 indicates that the **Input** contains more recorded votes than the official state election data
@@ -125,14 +127,14 @@ Description: # Verification of Election Shapefiles
         
         #### County Vote Score Dispersion
         
-        For each county, compute the square of the difference between the expected number of votes for the democratic and republican candidate. Then, County Vote Score Dispersion is the average of the square difference across all the counties in the state. [Python Implementation](https://github.com/OpenPrecincts/verification/blob/c038afe26d17ca255128fee43d06e7a377f7f053/verify.py#L452)
+        For each county, compute the square of the difference between the expected number of votes for the democratic and republican candidate. Then, County Vote Score Dispersion is the average of the square difference across all the counties in the state. [Python Implementation](https://github.com/OpenPrecincts/verification/blob/master/op_verification/verify.py#L450)
         
         * Ideally County Vote Score Dispersion = 0
         * As the County Vote Score Dispersion increases, so does the degree to which the **Input** differs with respect to official state election data records about the county-level results.
         
         #### Area Difference Score
         
-        Compute the symmetric difference between the **Input's** geometries and the expected geometries for that state from the Census Bureau. Then Area Difference Score is the ratio of the symmetric difference's area to the area of the precinct shapefiles. [Python Implementation](https://github.com/OpenPrecincts/verification/blob/c038afe26d17ca255128fee43d06e7a377f7f053/verify.py#L185)
+        Compute the symmetric difference between the **Input's** geometries and the expected geometries for that state from the Census Bureau. Then Area Difference Score is the ratio of the symmetric difference's area to the area of the precinct shapefiles. [Python Implementation](https://github.com/OpenPrecincts/verification/blob/master/op_verification/verify.py#L186)
         
         * Ideally Area Difference Score is 0
         * As the Area Difference Score increases it indicates a greater geometric difference between the observed geometry in the **Input** and the expected geometry.
