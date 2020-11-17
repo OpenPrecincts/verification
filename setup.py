@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="op_verification",
-    version="0.0.9",
+    version="0.0.2",
     author="Baxter Demers",
     author_email="baxter.demers@gmail.com",
     description="Compares a Precinct-Level Election Shapefile with expected election results and geometries.",
@@ -23,12 +23,9 @@ setuptools.setup(
         'geopandas>=0.8.1',
         'pandas>=1.1.4',
         'shapely',
-        'functools',
-        'operator',
         'statistics',
         'gerrychain',
         'maup',
-        'collections'
     ],
     include_package_data=True,
     package_data={

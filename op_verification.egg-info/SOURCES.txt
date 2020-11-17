@@ -7,4 +7,5 @@ op_verification/verify.py
 op_verification.egg-info/PKG-INFO
 op_verification.egg-info/SOURCES.txt
 op_verification.egg-info/dependency_links.txt
+op_verification.egg-info/requires.txt
 op_verification.egg-info/top_level.txt
