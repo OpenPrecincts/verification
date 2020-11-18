@@ -2,12 +2,34 @@
 
 This verification script generates a report that compares a **Precinct-Level Election Shapefile** with expected election results and geometries.
 
+## Installation
+
+This repository is availibe as a package on [PyPI](https://pypi.org/project/op-verification/).
+
+To install `op-verification` from PyPI, run `pip install op-verification`. 
+
 ## Sources
 
 * Expected election results (for 2016 Data) are sourced from [MIT Election Data + Science Lab (MEDSL)](https://electionlab.mit.edu/data)
 * Expected geometries are sourced from [The United States Census Bureau](https://www.census.gov/) and the [Alaska Division of Elections](http://www.elections.alaska.gov/doc/info/2013-HD-ProclamationPlan.zip)
 
 ## Usage
+
+Checkout [`Verification Example Notebook.ipynb`](https://github.com/OpenPrecincts/verification/blob/master/examples/Verification%20Example%20Notebook.ipynb) for examples.
+
+When importing, use:
+
+```python
+import op_verification
+```
+
+rather than
+
+```python
+import op-verification
+```
+
+The latter option won't work.
 
 ### Inputs and Outputs
 
