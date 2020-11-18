@@ -4,3 +4,4 @@ shapely
 statistics
 gerrychain
 maup
+tabulate

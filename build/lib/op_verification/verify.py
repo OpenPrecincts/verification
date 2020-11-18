@@ -11,14 +11,14 @@ import warnings
 from functools import reduce
 from operator import add
 import statistics
-
+import warnings 
+warnings.filterwarnings('ignore')
 from gerrychain import Graph
 import maup
 import shapely as shp
 from collections import defaultdict
-
-from verification_data import expected_election_results_2016, census_us_county_gdf
-from reference_data import (
+from op_verification.verification_data import expected_election_results_2016, census_us_county_gdf
+from op_verification.reference_data import (
     geoid_to_county_name,
     state_to_fips,
     state_abbreviation_to_state_name,
@@ -198,7 +198,7 @@ def get_area_difference_score(gdf1, gdf2, path=None):
     """
     try:
         if not gdf1.crs:
-            gdf1.crs = "epsg:4326"
+            gdf1 = gdf1.set_crs("EPSG:4326")
         gdf1 = gdf1.to_crs(gdf2.crs)
         poly1 = shp.ops.cascaded_union(gdf1["geometry"])
         poly2 = shp.ops.cascaded_union(gdf2["geometry"])
@@ -337,7 +337,7 @@ def assign_GEOID(state_prec_gdf, state_fips):
     ]
     # match their projections (necessary for maup.assign)
     if not state_prec_gdf.crs:
-        state_prec_gdf.crs = "epsg:4326"
+        state_prec_gdf = state_prec_gdf.set_crs("EPSG:4326")
     state_prec_gdf = state_prec_gdf.to_crs(state_county_df.crs)
     assert state_prec_gdf.crs == state_county_df.crs
 
@@ -478,7 +478,7 @@ def verify_topology(state_prec_df, state_report):
         ]
         # match their projections (necessary for maup.assign)
         if not state_prec_gdf.crs:
-            state_prec_gdf.crs = "epsg:4326"
+            state_prec_gdf = state_prec_gdf.set_crs("EPSG:4326")
         state_prec_gdf = state_prec_gdf.to_crs(state_county_df.crs)
         assert state_prec_gdf.crs == state_county_df.crs
         gdf = fix_buffer(state_prec_gdf)
@@ -606,7 +606,7 @@ def make_report(path, state_report, county_report_lst):
             "n_two_party_votes_observed",
         ]
     ]
-    county_reports_md = county_reports.to_markdown(showindex=False)
+    county_reports_md = county_reports.to_markdown(index=False)
 
     report = """
 # Election Shapefile Verification Report

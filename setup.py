@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="op_verification",
-    version="0.0.2",
+    version="0.0.10",
     author="Baxter Demers",
     author_email="baxter.demers@gmail.com",
     description="Compares a Precinct-Level Election Shapefile with expected election results and geometries.",
@@ -26,6 +26,7 @@ setuptools.setup(
         'statistics',
         'gerrychain',
         'maup',
+        'tabulate',
     ],
     include_package_data=True,
     package_data={
