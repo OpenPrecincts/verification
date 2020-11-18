@@ -1,9 +1,11 @@
 import geopandas as gpd
 import pandas as pd
 import shapely as shp
+import pkg_resources
 
 # Expected Geomerty Shapefiles
-census_us_county_gdf = gpd.read_file("./data/county_shapefiles/cb_2016_us_county_500k")
+county_shapefiles_path = pkg_resources.resource_filename('op_verification', "data/county_shapefiles/cb_2016_us_county_500k")
+census_us_county_gdf = gpd.read_file(county_shapefiles_path)
 census_us_county_gdf["NAME"] = census_us_county_gdf["NAME"].str.lower()
 
 # Remove alaska because it uses state house districts instead of counties for reporting
@@ -27,8 +29,8 @@ census_us_county_gdf = census_us_county_gdf.drop(
     census_us_county_gdf[census_us_county_gdf.GEOID == "15005"].index
 )
 
-
-alaska_districts = gpd.read_file("./data/county_shapefiles/2013-HD-ProclamationPlan")
+ak_shapefiles_path = pkg_resources.resource_filename('op_verification', "data/county_shapefiles/2013-HD-ProclamationPlan")
+alaska_districts = gpd.read_file(ak_shapefiles_path)
 alaska_districts["STATEFP"] = "02"
 alaska_districts["COUNTYFP"] = alaska_districts["District_N"].apply(
     lambda x: x.zfill(3)
@@ -50,7 +52,8 @@ census_us_county_gdf = gpd.GeoDataFrame(
 
 
 # Expected Election Results
-county_level_results_df = pd.read_csv("data/election_results/countypres_2000-2016.csv")
+results_path = pkg_resources.resource_filename('op_verification', "data/election_results/countypres_2000-2016.csv")
+county_level_results_df = pd.read_csv(results_path)
 county_level_results_df = county_level_results_df[
     county_level_results_df.year == 2016
 ].reset_index()

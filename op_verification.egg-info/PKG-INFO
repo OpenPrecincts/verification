@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: op-verification
-Version: 0.0.2
+Version: 0.0.10
 Summary: Compares a Precinct-Level Election Shapefile with expected election results and geometries.
 Home-page: https://github.com/OpenPrecincts/verification
 Author: Baxter Demers
